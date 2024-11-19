@@ -43,7 +43,7 @@ jobs:
       # If you have any tests, this step will help ensure that your code works as expected
       - name: Run tests
         run: |
-          docker compose run wordpress-container php -m  # Example: check PHP modules, replace with real tests
+          docker compose run wordpress php -m  
 
   # deploy:
   #   runs-on: ubuntu-latest
