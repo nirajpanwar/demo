@@ -32,18 +32,18 @@ jobs:
       # Step 4: Build the Docker images for WordPress and MySQL
       - name: Build the Docker images
         run: |
-          docker-compose build
+          docker compose up -d --build
 
       # Step 5: Push the Docker images to Docker Hub
       - name: Push Docker images
         run: |
-          docker-compose push
+          docker compose push
 
       # Optional: Step 6: Run tests (e.g., unit tests, integration tests, or health checks)
       # If you have any tests, this step will help ensure that your code works as expected
       - name: Run tests
         run: |
-          docker-compose run wordpress-container php -m  # Example: check PHP modules, replace with real tests
+          docker compose run wordpress-container php -m  # Example: check PHP modules, replace with real tests
 
   # deploy:
   #   runs-on: ubuntu-latest
