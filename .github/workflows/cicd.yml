@@ -1,0 +1,71 @@
+name: WordPress Docker CI/CD Pipeline
+
+# Trigger the workflow when pushing to the `main` branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Docker Buildx (for advanced build capabilities)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Use GitHub Secrets for credentials
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 4: Build the Docker images for WordPress and MySQL
+      - name: Build the Docker images
+        run: |
+          docker-compose build
+
+      # Step 5: Push the Docker images to Docker Hub
+      - name: Push Docker images
+        run: |
+          docker-compose push
+
+      # Optional: Step 6: Run tests (e.g., unit tests, integration tests, or health checks)
+      # If you have any tests, this step will help ensure that your code works as expected
+      - name: Run tests
+        run: |
+          docker-compose run wordpress-container php -m  # Example: check PHP modules, replace with real tests
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build  # Ensure deploy only runs after the build is successful
+  #   environment:
+  #     name: production
+  #     url: ${{ steps.deploy.outputs.website_url }}
+
+  #   steps:
+  #     # Step 1: Check out the code again
+  #     - name: Check out the code
+  #       uses: actions/checkout@v2
+
+  #     # Step 2: SSH into the production server and deploy the containers
+  #     - name: Deploy to production server
+  #       uses: appleboy/ssh-action@v0.1.5
+  #       with:
+  #         host: ${{ secrets.SERVER_IP }}
+  #         username: ${{ secrets.SERVER_USER }}
+  #         password: ${{ secrets.SERVER_PASSWORD }}
+  #         script: |
+  #           cd ./
+  #           docker-compose pull   # Pull latest images from Docker Hub
+  #           docker-compose up -d  # Restart services with the new images
+
