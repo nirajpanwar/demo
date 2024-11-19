@@ -1,0 +1,60 @@
+
+
+services:
+  wordpress:
+    # image: wordpress:latest
+    container_name: wordpress-container
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"  # host port : container port
+    # environment:
+    #   WORDPRESS_DB_HOST: mysql-box    # Link to the MySQL container
+    #   WORDPRESS_DB_NAME: wordpress_db
+    #   WORDPRESS_DB_USER: wordpress_user
+    #   WORDPRESS_DB_PASSWORD: wordpress_password
+    volumes:
+      - wordpress_data:/var/www/html  # Persist WordPress data in a volume
+    networks:
+      - wordpress_net
+
+  # nginx:
+  #   container_name: nginx-container
+  #   image: nginx:latest
+  #   restart: always
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf  # Mount your custom nginx config here
+  #     - wordpress_data:/var/www/html  # Ensure WordPress data is available to Nginx
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - wordpress
+  #   networks:
+  #     - wordpress_net
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-box
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password  # Root password for MySQL
+      MYSQL_DATABASE: wordpress_db      # Database name for WordPress
+      MYSQL_USER: wordpress_user        # MySQL user for WordPress
+      MYSQL_PASSWORD: wordpress_password  # MySQL user password
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist MySQL data in a volume
+    networks:
+      - wordpress_net
+    
+
+volumes:
+  wordpress_data:
+  mysql_data:
+
+networks:
+  wordpress_net:
+    driver: bridge
+
+
