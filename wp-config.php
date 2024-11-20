@@ -114,8 +114,8 @@ $table_prefix = getenv_docker('WORDPRESS_TABLE_PREFIX', 'wp_');
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
 define( 'WP_DEBUG', !!getenv_docker('WORDPRESS_DEBUG', '') );
-define('WP_HOME', 'http://localhost:80');
-define('WP_SITEURL', 'http://localhost:80');
+define('WP_HOME', 'http://23.22.142.133:80');
+define('WP_SITEURL', 'http://23.22.142.133:80');
 
 /* Add any custom values between this line and the "stop editing" line. */
 
