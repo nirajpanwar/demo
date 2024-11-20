@@ -47,7 +47,9 @@ jobs:
     needs: build  # Ensure deploy only runs after the build is successful
     environment:
       name: production
-      url: ${{ steps.deploy.outputs.website_url }}
+      run: |
+        echo "The deployed website URL is: ${{ steps.deploy.outputs.website_url }}"
+
 
     steps:
       # Step 1: Check out the code again
