@@ -45,27 +45,27 @@ jobs:
         run: |
           docker compose run wordpress php -m  
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build  # Ensure deploy only runs after the build is successful
-  #   environment:
-  #     name: production
-  #     url: ${{ steps.deploy.outputs.website_url }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Ensure deploy only runs after the build is successful
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.website_url }}
 
-  #   steps:
-  #     # Step 1: Check out the code again
-  #     - name: Check out the code
-  #       uses: actions/checkout@v2
+    steps:
+      # Step 1: Check out the code again
+      - name: Check out the code
+        uses: actions/checkout@v2
 
-  #     # Step 2: SSH into the production server and deploy the containers
-  #     - name: Deploy to production server
-  #       uses: appleboy/ssh-action@v0.1.5
-  #       with:
-  #         host: ${{ secrets.SERVER_IP }}
-  #         username: ${{ secrets.SERVER_USER }}
-  #         password: ${{ secrets.SERVER_PASSWORD }}
-  #         script: |
-  #           cd ./
-  #           docker-compose pull   # Pull latest images from Docker Hub
-  #           docker-compose up -d  # Restart services with the new images
+      # Step 2: SSH into the production server and deploy the containers
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd ./
+            docker-compose pull   # Pull latest images from Docker Hub
+            docker-compose up -d  # Restart services with the new images
 
