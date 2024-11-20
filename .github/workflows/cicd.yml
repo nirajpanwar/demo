@@ -63,6 +63,7 @@ jobs:
           key: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ./
+            docker login -u="${{secrets.DOCKER_USERNAME}}" -p="${{secrets.DOCKER_PASSWORD}}"
             docker pull npneeraj/wpaws:latest
             docker run --name=wp-ubuntu --network=my-net -d -p 80:80 wpaws:latest
             docker run --name=mysql-box --network=my-net -v my-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_password -e MYSQL_USER=wordpress_user -e MYSQL_PASSWORD=wordpress_password -e MYSQL_DATABASE=wordpress_db   -p 3306:3306  -d mysql:5.7
