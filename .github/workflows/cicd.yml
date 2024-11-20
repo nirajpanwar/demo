@@ -45,7 +45,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build  # Ensure deploy only runs after the build is successful
-    steps:
+    environment:
       - name: production
         run: |
           echo "The deployed website URL is: ${{ steps.deploy.outputs.website_url }}"
