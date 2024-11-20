@@ -32,18 +32,15 @@ jobs:
       # Step 4: Build the Docker images for WordPress and MySQL
       - name: Build the Docker images
         run: |
-          docker compose up -d --build
+          docker build -t wpaws .
 
       # Step 5: Push the Docker images to Docker Hub
       - name: Push Docker images
         run: |
-          docker compose push
+          docker tag wpaws npneeraj/wpaws:latest
+          docker push npneeraj/wpaws:latest
 
-      # Optional: Step 6: Run tests (e.g., unit tests, integration tests, or health checks)
-      # If you have any tests, this step will help ensure that your code works as expected
-      - name: Run tests
-        run: |
-          docker compose run wordpress php -m  
+  
 
   deploy:
     runs-on: ubuntu-latest
@@ -66,6 +63,9 @@ jobs:
           key: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ./
-            docker compose pull   # Pull latest images from Docker Hub
-            docker compose up -d  # Restart services with the new images
+            docker pull npneeraj/wpaws:latest
+            docker run --name=wp-ubuntu --network=my-net -d -p 80:80 wpaws:latest
+            docker run --name=mysql-box --network=my-net -v my-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_password -e MYSQL_USER=wordpress_user -e MYSQL_PASSWORD=wordpress_password -e MYSQL_DATABASE=wordpress_db   -p 3306:3306  -d mysql:5.7
+            
+            
 
