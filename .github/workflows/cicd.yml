@@ -72,7 +72,7 @@ jobs:
         id: deploy
         run: |
           # Simulate deployment and capture the website URL
-          echo "::set-output name=website_url::${{ secrets.SERVER_IP }}"      
+          echo "website_url=${{ secrets.SERVER_IP }}" >> $GITHUB_OUTPUT    
       
       - name: production
         run: |
