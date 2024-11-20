@@ -67,7 +67,13 @@ jobs:
             docker pull npneeraj/wpaws:latest
             docker run --name=wp-ubuntu --network=my-net -d -p 80:80 npneeraj/wpaws:latest
             docker run --name=mysql-box --network=my-net -v my-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root_password -e MYSQL_USER=wordpress_user -e MYSQL_PASSWORD=wordpress_password -e MYSQL_DATABASE=wordpress_db   -p 3306:3306  -d mysql:5.7
-            
+      
+      - name: Deploy the app
+        id: deploy
+        run: |
+          # Simulate deployment and capture the website URL
+          echo "::set-output name=website_url::${{ secrets.SERVER_IP }}"      
+      
       - name: production
         run: |
           echo "The deployed website URL is: ${{ steps.deploy.outputs.website_url }}"
